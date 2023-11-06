@@ -11,6 +11,9 @@ from instagrapi import Client
 
 
 logger = logging.getLogger(__name__)
+ConsoleOutputHandler = logging.StreamHandler()
+logger.addHandler(ConsoleOutputHandler)
+logger.setLevel(logging.INFO)
 
 DEFAULT_CAPTION = """Feel free to send me a message if you have any clip of Toji Fushiguro. I'll be happy to post it here.
     \n\n #JujutsuKaisen #TojiFushiguro #Toji #TojiFushiguroShorts #TojiFushiguroShortsCompilation"""

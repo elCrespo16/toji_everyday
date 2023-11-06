@@ -5,6 +5,9 @@ import telebot
 
 
 logger = logging.getLogger(__name__)
+ConsoleOutputHandler = logging.StreamHandler()
+logger.addHandler(ConsoleOutputHandler)
+logger.setLevel(logging.INFO)
 
 class Singleton(type):
     _instance = None
@@ -23,5 +26,6 @@ class TelegramNotifier(metaclass=Singleton):
     def notify(self, message) -> None:
         try:
             self.bot.send_message(self.chat_id, message)
+            logger.info(message)
         except Exception:
             logger.info("Could not send Telegram message")
