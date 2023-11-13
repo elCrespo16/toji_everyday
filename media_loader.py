@@ -15,8 +15,11 @@ ConsoleOutputHandler = logging.StreamHandler()
 logger.addHandler(ConsoleOutputHandler)
 logger.setLevel(logging.INFO)
 
-DEFAULT_CAPTION = """Feel free to send me a message if you have any clip of Toji Fushiguro. I'll be happy to post it here.
-    \n\n #JujutsuKaisen #TojiFushiguro #Toji #TojiFushiguroShorts #TojiFushiguroShortsCompilation"""
+DEFAULT_CAPTION = """We all want to be like Toji. \n \n GO FOR IT. \n \n
+    Feel free to send me a message if you have any clip of Toji Fushiguro. I'll be happy to post it here.
+    \n\n #JujutsuKaisen #TojiFushiguro #Fushiguro #Toji #TojiFushiguroShorts #TojiFushiguroShortsCompilation"""
+
+START_DAY = datetime.datetime(2023, 11, 5)
 
 class Config(BaseModel):
     is_story: bool = False
@@ -30,8 +33,13 @@ class Config(BaseModel):
         with open(config_file) as f:
             config = yaml.load(f.read(), Loader=yaml.FullLoader)
         new_config =  cls.parse_obj(config)
-        new_config.caption =  new_config.caption + "\n" + DEFAULT_CAPTION
+        new_config.caption = new_config.set_publication_day(new_config.caption)
         return new_config
+
+    def set_publication_day(self, caption: str) -> str:
+        publication_day = datetime.datetime.today() - START_DAY
+        caption =  f"DAY {publication_day.days} \n\n {caption}  \n\n  {DEFAULT_CAPTION}"
+        return caption
 
     def save(self, config_file):
         with open(config_file, "w") as f:

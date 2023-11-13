@@ -28,3 +28,4 @@ venv/
 *.sqlite3
 *.db
 media
+toji_logs.log
