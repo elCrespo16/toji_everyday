@@ -22,14 +22,19 @@ DEFAULT_CAPTION = """We all want to be like Toji. \n \n GO FOR IT. \n \n
 START_DAY = datetime.datetime(2023, 11, 5)
 
 class Config(BaseModel):
+    """
+    Config file for media
+    """
     is_story: bool = False
     is_feed: bool = True
     is_easter_egg: bool = False
-    link: str = ""
     caption: str = ""
 
     @classmethod
     def load(cls, config_file) -> 'Config':
+        """
+        Load config from file
+        """
         with open(config_file) as f:
             config = yaml.load(f.read(), Loader=yaml.FullLoader)
         new_config =  cls.parse_obj(config)
@@ -37,11 +42,17 @@ class Config(BaseModel):
         return new_config
 
     def set_publication_day(self, caption: str) -> str:
+        """
+        Set the publication day in the caption
+        """
         publication_day = datetime.datetime.today() - START_DAY
         caption =  f"DAY {publication_day.days} \n\n {caption}  \n\n  {DEFAULT_CAPTION}"
         return caption
 
     def save(self, config_file):
+        """
+        Save config to file
+        """
         with open(config_file, "w") as f:
             yaml.dump(self.dict(), f, default_flow_style=False)
 
@@ -50,6 +61,9 @@ class Media(ABC):
     def __init__(self, file_path: Path,
                  config: Config,
                  thumbnail_path: Optional[Path] = None):
+        """
+        Media object
+        """
         self.file_path = file_path
         self.thumbnail_path = thumbnail_path if thumbnail_path is not None else file_path.parent / "thumbnail.jpg"
         self.config = config
@@ -57,15 +71,24 @@ class Media(ABC):
 
     @abstractmethod
     def upload(self, client: Client, to_story: bool = False):
+        """
+        Upload media to instagram
+        """
         pass
 
     def default_thumbnail(self):
+        """
+        Create a default thumbnail
+        """
         default_thumbnail_path = str(self.file_path) + ".jpg"
         os.rename(default_thumbnail_path, self.thumbnail_path)
 
 
 class Image(Media):
     def upload(self, client: Client, to_story: bool = False):
+        """
+        Upload image to instagram
+        """
         if to_story and self.config.is_story:
             client.photo_upload_to_story(
                 self.file_path,
@@ -80,6 +103,9 @@ class Image(Media):
 
 class Video(Media):
     def upload(self, client: Client, to_story: bool = False):
+        """
+        Upload video to instagram
+        """
         kwargs = {}
         if self.thumbnail_exists:
             kwargs = {
@@ -102,8 +128,6 @@ class Video(Media):
             self.thumbnail_exists = True
 
 
-
-
 MEDIA_FILE_EXTENSIONS = (".mp4", ".jpg")
 
 class MediaFactory:
@@ -112,6 +136,9 @@ class MediaFactory:
     def create_media(file_path: Path,
                      thumbnail_path: Optional[Path] = None,
                      config_path: Optional[Path] = None) -> Media:
+        """
+        Create media object
+        """
         MediaFactory.validate(file_path, thumbnail_path)
         if config_path is None or not config_path.exists():
                 config = Config()
@@ -125,6 +152,9 @@ class MediaFactory:
 
     @staticmethod
     def validate(file_path: Path, thumbnail_path: Optional[Path] = None):
+        """
+        Validate media file
+        """
         if file_path.suffix not in MEDIA_FILE_EXTENSIONS:
             raise ValueError(f"Invalid file extension {file_path.suffix}")
         if thumbnail_path is not None and not thumbnail_path.exists():
@@ -145,6 +175,9 @@ class MediaLoader:
         self.easter_eggs = []
 
     def load_media(self):
+        """
+        Load media from directory
+        """
         for directories in os.listdir(self.directory):
             directory_path = Path(self.directory, directories)
             if directory_path.is_dir():
@@ -171,12 +204,18 @@ class MediaLoader:
             logger.info("No easter eggs found in directory")
 
     def get_daily_media(self) -> Media:
+        """
+        Get daily media
+        """
         if self.media:
             return self.media[random.randint(0, len(self.media) - 1)]
         else:
             raise ValueError("No media found")
 
     def get_daily_story(self) -> Optional[Media]:
+        """
+        Get daily story
+        """
         random_number = random.randint(1, 365)
         today = datetime.datetime.today()
         if self.easter_eggs and random_number == today.timetuple().tm_yday:
