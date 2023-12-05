@@ -17,7 +17,7 @@ logger.setLevel(logging.INFO)
 
 DEFAULT_CAPTION = """We all want to be like Toji. \n \n GO FOR IT. \n \n
     Feel free to send me a message if you have any clip of Toji Fushiguro. I'll be happy to post it here.
-    \n\n #JujutsuKaisen #TojiFushiguro #Fushiguro #Toji #TojiFushiguroShorts #TojiFushiguroShortsCompilation"""
+    \n\n #jujutsu #JujutsuKaisen #TojiFushiguro #Fushiguro #Toji #TojiFushiguroShorts #TojiFushiguroShortsCompilation"""
 
 START_DAY = datetime.datetime(2023, 11, 5)
 
@@ -102,6 +102,11 @@ class Image(Media):
 
 
 class Video(Media):
+
+    def __init__(self, file_path: Path, config: Config, thumbnail_path: Path | None = None):
+        super().__init__(file_path, config, thumbnail_path)
+        self.story_path = file_path.parent / "story.mp4"
+
     def upload(self, client: Client, to_story: bool = False):
         """
         Upload video to instagram
@@ -112,8 +117,11 @@ class Video(Media):
                 "thumbnail": self.thumbnail_path,
             }
         if to_story and self.config.is_story:
+            tarjet_path = self.file_path
+            if self.story_path.exists():
+                tarjet_path = self.story_path
             client.video_upload_to_story(
-                self.file_path,
+                tarjet_path,
                 self.config.caption,
                 **kwargs # type: ignore
             )
