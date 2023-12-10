@@ -67,9 +67,11 @@ if __name__ == "__main__":
         client.delay_range = [1, 3]
         login_user(client, username, password)
         daily_media = media_loader.get_daily_media()
+        logger.info(f"Uploading {daily_media.file_path}")
         daily_media.upload(client)
         daily_story = media_loader.get_daily_story()
         if daily_story is not None:
+            logger.info(f"Uploading {daily_story.file_path}")
             daily_story.upload(client, to_story=True)
         client.dump_settings(session_path)
     except Exception as e:
