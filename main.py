@@ -7,7 +7,10 @@ from telegram import TelegramNotifier
 from instagrapi.exceptions import LoginRequired
 import logging
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
+ConsoleOutputHandler = logging.StreamHandler()
+logger.addHandler(ConsoleOutputHandler)
+logger.setLevel(logging.INFO)
 session_path = Path("session.json")
 
 def login_user(cl: Client, USERNAME: str, PASSWORD: str):
