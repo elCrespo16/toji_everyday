@@ -2,6 +2,7 @@
 
 set -e
 
+source /home/felipe/.profile
 source /home/felipe/.bashrc
 
 

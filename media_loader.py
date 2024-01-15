@@ -4,6 +4,8 @@ import datetime
 import random
 import logging
 from pathlib import Path
+from re import I
+from tkinter.tix import IMAGE
 from typing import Optional
 from pydantic import BaseModel
 import yaml
@@ -15,9 +17,11 @@ ConsoleOutputHandler = logging.StreamHandler()
 logger.addHandler(ConsoleOutputHandler)
 logger.setLevel(logging.INFO)
 
-DEFAULT_CAPTION = """We all want to be like Toji. \n \n GO FOR IT. \n \n
+DEFAULT_CAPTION = """We all want to be like Toji. \n GO FOR IT. \n
     Feel free to send me a message if you have any clip of Toji Fushiguro. I'll be happy to post it here.
-    \n\n #jujutsu #JujutsuKaisen #TojiFushiguro #Fushiguro #Toji #TojiFushiguroShorts #TojiFushiguroShortsCompilation"""
+    \n\n #jujutsu #JujutsuKaisen #TojiFushiguro #Fushiguro #Toji #TojiFushiguroShorts #TojiFushiguroShortsCompilation
+    #jjk #anime #manga #gojo #geto #sukuna #itadori #nobara #megumi #satoru #yuta #yujisatoru #yujikaisen #satorugojo
+    """
 
 START_DAY = datetime.datetime(2023, 11, 5)
 
@@ -137,6 +141,7 @@ class Video(Media):
 
 
 MEDIA_FILE_EXTENSIONS = (".mp4", ".jpg")
+IMAGE_FILE_EXTENSIONS = (".jpg", ".jpeg")
 
 class MediaFactory:
 
@@ -153,7 +158,7 @@ class MediaFactory:
                 config.save(config_path)
         else:
             config = Config.load(config_path)
-        if file_path.suffix == ".jpg":
+        if file_path.suffix in IMAGE_FILE_EXTENSIONS:
             return Image(file_path, config, thumbnail_path)
         else:
             return Video(file_path, config, thumbnail_path)

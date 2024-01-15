@@ -6,7 +6,13 @@ This project automates the daily uploading of media to Instagram using the `inst
 
 Before running the scripts, make sure you have the required dependencies installed. You can install them using the following command:
 
-pip install instagrapi pydantic python-dotenv
+pip install -r requirements.txt
+
+Install the `ffmpeg` library to support video uploads
+
+The recommended python version is 3.11.3
+
+As usual, it is recommended to use a virtual environment to manage your dependencies. I use `pyenv` to manage my virtual environments.
 
 ## Directory Preparation Script
 
@@ -34,19 +40,9 @@ Replace `/path/to/directory` with the path to the directory you want to prepare.
 
 The `media_loader.py` script handles media files and their configurations. It supports both images and videos, with optional features like daily stories and easter eggs.
 
-### Prerequisites
-
-Before using the script, make sure you have the required dependencies installed. You can install them using the following command:
-
-pip install instagrapi pydantic
-
 ### Configuration
 
 Refer to the provided `media_loader.py` README section for details on how to organize your media files, configure media settings, and use the media loader script.
-
-### Usage
-
-To use the script, follow the steps outlined in the `media_loader.py` README section.
 
 ## Main Uploading Script (main.py)
 
@@ -99,7 +95,7 @@ To facilitate the daily uploads, a Bash script (upload.sh) has been provided. Fo
 
 1. Create a new file named upload.sh in your project directory.
 
-2. Copy and paste the following content into upload.sh:
+2. Copy and paste the following content into upload.sh, this script is supposed to use pyenv to activate the virtual environment and execute the main.py script. You can customize it to fit your project setup.
 ```bash
 #!/bin/bash
 

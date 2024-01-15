@@ -2,23 +2,26 @@ import os
 import yaml
 from media_loader import Config
 
-# Ask for directory
-import sys
+# Specify the directory you want to start from
+rootDir = os.path.join(os.path.dirname(__file__), '/media')
 
-dir_path = sys.argv[1]
+for dirName, subdirList, fileList in os.walk(rootDir):
+    if len(fileList) == 1:
+        file_name = fileList[0]
+        file_extension = os.path.splitext(file_name)[1]
+        if file_extension in ['.mp4', '.jpg', '.jpeg', '.png']:
+            # Change working directory to the specified directory
+            print(f'Found directory: {dirName}')
+            os.chdir(dirName)
 
-# Change working directory to the specified directory
-os.chdir(dir_path)
+            # Rename the file to "media"
+            new_file_name = "media" + file_extension
+            os.rename(file_name, new_file_name)
 
-# Get the name of the only file in the directory
-file_name = os.listdir()[0]
+            # Create a config.yaml file with the configurations from Config class
+            config = Config()
+            with open("config.yaml", "w") as f:
+                yaml.dump(config.__dict__, f)
 
-# Rename the file to "media"
-file_extension = os.path.splitext(file_name)[1]
-new_file_name = "media" + file_extension
-os.rename(file_name, new_file_name)
-
-# Create a config.yaml file with the configurations from Config class
-config = Config()
-with open("config.yaml", "w") as f:
-    yaml.dump(config.__dict__, f)
+            # Change working directory back to the root directory
+            os.chdir(rootDir)
