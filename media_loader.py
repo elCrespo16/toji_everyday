@@ -140,8 +140,8 @@ class Video(Media):
             self.thumbnail_exists = True
 
 
-MEDIA_FILE_EXTENSIONS = (".mp4", ".jpg")
-IMAGE_FILE_EXTENSIONS = (".jpg", ".jpeg")
+MEDIA_FILE_EXTENSIONS = (".mp4", ".jpg", ".jpeg", ".png")
+IMAGE_FILE_EXTENSIONS = (".jpg", ".jpeg", ".png")
 
 class MediaFactory:
 
@@ -169,7 +169,7 @@ class MediaFactory:
         Validate media file
         """
         if file_path.suffix not in MEDIA_FILE_EXTENSIONS:
-            raise ValueError(f"Invalid file extension {file_path.suffix}")
+            raise ValueError(f"Invalid file extension {file_path.suffix} {file_path}")
         if thumbnail_path is not None and not thumbnail_path.exists():
             logger.info(f"Thumbnail {thumbnail_path} does not exist")
         if thumbnail_path is not None and thumbnail_path.suffix != ".jpg":
