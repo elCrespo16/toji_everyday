@@ -93,7 +93,7 @@ class Image(Media):
         """
         Upload image to instagram
         """
-        if to_story and self.config.is_story:
+        if to_story and self.config.is_story or self.config.is_easter_egg:
             client.photo_upload_to_story(
                 self.file_path,
                 self.config.caption,
@@ -120,7 +120,7 @@ class Video(Media):
             kwargs = {
                 "thumbnail": self.thumbnail_path,
             }
-        if to_story and self.config.is_story:
+        if to_story and self.config.is_story or self.config.is_easter_egg:
             tarjet_path = self.file_path
             if self.story_path.exists():
                 tarjet_path = self.story_path
