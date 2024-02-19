@@ -4,8 +4,6 @@ import datetime
 import random
 import logging
 from pathlib import Path
-from re import I
-from tkinter.tix import IMAGE
 from typing import Optional
 from pydantic import BaseModel
 import yaml

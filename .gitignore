@@ -29,3 +29,6 @@ venv/
 *.db
 media
 toji_logs.log
+session.json
+possibles_clips.txt
+.DS_Store
