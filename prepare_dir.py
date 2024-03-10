@@ -3,8 +3,9 @@ import yaml
 from media_loader import Config
 
 # Specify the directory you want to start from
-rootDir = os.path.join(os.path.dirname(__file__), '/media')
+rootDir = os.path.join(os.path.dirname(__file__), 'media')
 
+print(f'Root directory: {rootDir}')
 for dirName, subdirList, fileList in os.walk(rootDir):
     if len(fileList) == 1:
         file_name = fileList[0]
