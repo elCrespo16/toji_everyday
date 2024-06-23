@@ -9,6 +9,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 ConsoleOutputHandler = logging.StreamHandler()
+logging.basicConfig(filename='summary.log', encoding='utf-8', level=logging.INFO)
 logger.addHandler(ConsoleOutputHandler)
 logger.setLevel(logging.INFO)
 session_path = Path("session.json")
